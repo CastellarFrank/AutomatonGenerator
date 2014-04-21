@@ -10,10 +10,8 @@
  */
 package BuenRecord.GUI.Loader;
 
-import BuenRecord.Wrapper.AFDMain;
+import BuenRecord.Logic.AFDProcessing;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
@@ -24,9 +22,14 @@ import javax.xml.bind.JAXBException;
  */
 public class LoaderXML extends javax.swing.JFrame {
 
+    
+    
+    public AFDProcessing AFDManager;
     /** Creates new form LoaderXML */
     public LoaderXML() {
         initComponents();
+        this.setResizable(false);
+        AFDManager = new AFDProcessing();
     }
 
     /** This method is called from within the constructor to
@@ -43,6 +46,9 @@ public class LoaderXML extends javax.swing.JFrame {
         btnPath = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         btnLoad = new javax.swing.JButton();
+        btnValidate = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        lblADFLoaded = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,7 +61,7 @@ public class LoaderXML extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("ADF XML Loader");
 
         btnLoad.setText("Load");
@@ -65,44 +71,66 @@ public class LoaderXML extends javax.swing.JFrame {
             }
         });
 
+        btnValidate.setText("Expression");
+        btnValidate.setEnabled(false);
+        btnValidate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValidateActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("ADF Loaded:");
+
+        lblADFLoaded.setText("There isn't any ADF loaded.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblADFLoaded))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(24, 24, 24)
+                            .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnPath, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
-                    .addComponent(jLabel1))
-                .addContainerGap(39, Short.MAX_VALUE))
+                        .addComponent(jLabel2))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(btnPath)
-                            .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(68, 68, 68)))
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lblADFLoaded))
                 .addGap(18, 18, 18)
-                .addComponent(btnLoad)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnPath)
+                    .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-467)/2, (screenSize.height-255)/2, 467, 255);
+        setBounds((screenSize.width-467)/2, (screenSize.height-289)/2, 467, 289);
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPathActionPerformed
@@ -131,6 +159,19 @@ private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     parseXMLFile(tempFile);
         
 }//GEN-LAST:event_btnLoadActionPerformed
+
+private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidateActionPerformed
+    String expression = JOptionPane.showInputDialog(this, "Write an expression to validate.", 
+            "Input Expression", JOptionPane.INFORMATION_MESSAGE);
+    
+    boolean isValid = AFDManager.validateExpression(expression);
+    if(isValid)
+        JOptionPane.showMessageDialog(this, "The expression: [" + expression + "] is valid.", 
+                "Valid expression", JOptionPane.INFORMATION_MESSAGE);
+    else
+        JOptionPane.showMessageDialog(this, "The expression: [" + expression + "] is invalid.\nDetail: " + AFDManager.getErrorMessage(), 
+                "Invalid expression", JOptionPane.ERROR_MESSAGE);
+}//GEN-LAST:event_btnValidateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,19 +212,42 @@ private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoad;
     private javax.swing.JButton btnPath;
+    private javax.swing.JButton btnValidate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblADFLoaded;
     private javax.swing.JTextField txtPath;
     // End of variables declaration//GEN-END:variables
 
     private void parseXMLFile(File tempFile) {
         try {
-            AFDMain.unmarshal(tempFile);
+            AFDManager.processXML(tempFile);
         } catch (JAXBException ex) {
-            JOptionPane.showMessageDialog(this,"Error parsing xml file.", 
-                    "Error XML", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(LoaderXML.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
+            invalidAFDLoaded("Error parsing xml file.");
         }
+        
+        String error = AFDManager.validateAFD();
+        
+        if(!error.isEmpty()){
+            invalidAFDLoaded(error);
+            return;
+        }
+        
+        validAFDLoaded();
+    }
+    
+    private void validAFDLoaded(){
+        lblADFLoaded.setText("AFD with name: [" + AFDManager.getContent().getName() + "] has been loaded.");
+        btnValidate.setEnabled(true);
+    }
+    
+    private void invalidAFDLoaded(String msg){
+        if(!msg.isEmpty())
+            JOptionPane.showMessageDialog(this,msg, 
+                    "Error XML", JOptionPane.ERROR_MESSAGE);
+        
+        lblADFLoaded.setText("There isn't any ADF loaded.");
+        btnValidate.setEnabled(false);
     }
 }
