@@ -25,7 +25,7 @@ public class AFDParserTest {
         String fileName = "testing.xml";
         String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         TestUtils.createFile(fileName, content);
-        AFDParser.unmarshal(new File(fileName));
+        AFParser.unmarshal(new File(fileName));
     }
     
     @Test
@@ -34,7 +34,7 @@ public class AFDParserTest {
         String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<AFD></AFD>";
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertNotNull(parse);
     }
     
@@ -49,7 +49,7 @@ public class AFDParserTest {
                 + "</AFD>";
         
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertEquals(1,parse.getStates().size());
         Assert.assertEquals("q0",parse.getStates().get(0).getValue());
     }
@@ -68,7 +68,7 @@ public class AFDParserTest {
                 + "</AFD>";
         
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertEquals(1,parse.getStates().size());
         Assert.assertEquals("q0",parse.getStates().get(0).getValue());
         
@@ -93,7 +93,7 @@ public class AFDParserTest {
                 + "</AFD>";
         
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertEquals(1,parse.getStates().size());
         Assert.assertEquals("q0",parse.getStates().get(0).getValue());
         
@@ -126,7 +126,7 @@ public class AFDParserTest {
                 + "</AFD>";
         
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertEquals(1,parse.getStates().size());
         Assert.assertEquals("q0",parse.getStates().get(0).getValue());
         
@@ -162,7 +162,7 @@ public class AFDParserTest {
                 + "</AFD>";
         
         TestUtils.createFile(fileName, content);
-        AFDParser parse = AFDParser.unmarshal(new File(fileName));
+        AFParser parse = AFParser.unmarshal(new File(fileName));
         Assert.assertEquals("q0",parse.getInitial());
         Assert.assertEquals("AnyName",parse.getName());
         

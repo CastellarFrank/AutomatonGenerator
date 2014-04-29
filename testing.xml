@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><AFD name="AnyName" initial="q0"><States><State>q0</State></States><Alphabet><Symbol>1</Symbol></Alphabet><Transitions><Transition state="q0" symbol="1" result="q1"/></Transitions><Finals><Final>q1</Final></Finals></AFD>
