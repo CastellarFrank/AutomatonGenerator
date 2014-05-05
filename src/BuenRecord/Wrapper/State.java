@@ -4,6 +4,8 @@
  */
 package BuenRecord.Wrapper;
 
+import BuenRecord.Logic.AFProcessing;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlValue;
@@ -24,6 +26,20 @@ public class State {
 
     public State(String value) {
         this.value = value;
+    }
+    
+    public boolean mathByValue(String value){
+        List<String> valueStates = AFProcessing.parseStateName(value);
+        List<String> currentStates = AFProcessing.parseStateName(this.value);
+        
+        if(valueStates.size() != currentStates.size())
+            return false;
+        
+        for(String tValue : valueStates){
+            if(!currentStates.contains(tValue))
+                return false;
+        }
+        return true;
     }
     
     public String getValue() {

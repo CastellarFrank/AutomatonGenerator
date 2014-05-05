@@ -12,6 +12,8 @@ package BuenRecord.GUI.Loader;
 
 import BuenRecord.Logic.AFProcessing;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
@@ -197,7 +199,14 @@ private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     
     if(expression == null || expression.isEmpty())
         return;
-    boolean isValid = AFManager.validateExpression(expression);
+    
+    boolean isValid = false;
+        try {
+            isValid = AFManager.validateExpression(expression);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    
     if(isValid)
         JOptionPane.showMessageDialog(this, "The expression: [" + expression + "] is valid.", 
                 "Valid expression", JOptionPane.INFORMATION_MESSAGE);
@@ -214,7 +223,8 @@ private void btnExportAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         String path = saveFile.getSelectedFile().getAbsolutePath();
             try {
                 AFManager.convertAFNtoAFD(path);
-            } catch (JAXBException ex) {
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
     }    
 }//GEN-LAST:event_btnExportAFDActionPerformed

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AF name="Números decimales" initial="q0" type="AFNE">
+	<States>
+		<State>q0</State>
+		<State>q1</State>
+		<State>q2</State>
+		<State>q3</State>
+		<State>q4</State>
+		<State>q5</State>
+	</States>
+	<Alphabet>
+		<Symbol>epsilon</Symbol>
+		<Symbol alter="sumRest" >#{+,-}</Symbol>
+		<Symbol>.</Symbol>
+		<Symbol alter="digits" >#{0..9}</Symbol>
+	</Alphabet>
+	<Transitions>
+		<Transition state="q0" symbol="epsilon" result="q1"/>
+		<Transition state="q0" symbolRef="sumRest" result="q1"/>
+
+		<Transition state="q1" symbol="." result="q2"/>
+		<Transition state="q1" symbolRef="digits" result="q1"/>
+		<Transition state="q1" symbolRef="digits" result="q4"/>
+
+		<Transition state="q2" symbolRef="digits" result="q3"/>
+
+		<Transition state="q3" symbol="epsilon" result="q5"/>
+		<Transition state="q3" symbolRef="digits" result="q3"/>
+
+		<Transition state="q4" symbol="." result="q3"/>
+	</Transitions>
+	<Finals>
+		<Final>q5</Final>
+	</Finals>
+</AF>
+

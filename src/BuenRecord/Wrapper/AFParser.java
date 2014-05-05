@@ -82,7 +82,7 @@ public class AFParser {
     
     public State getStateByValue(String value){
         for(State state : states){
-            if(state.getValue().equals(value))
+            if(state.mathByValue(value))
                 return state;
         }
         return null;
@@ -91,33 +91,42 @@ public class AFParser {
     public List<Transition> getTransitionsByState(String stateValue){
         List<Transition> tempList = new ArrayList<Transition>();
         for(Transition tran: transitions){
-            if(tran.getState().equals(stateValue))
+            if(tran.mathByStateValue(stateValue))
                 tempList.add(tran);
         }
         return tempList;
     }
     
-    public Transition getTransitionByStateAndSymbol(String state, String symbol){
+    public Transition getTransitionByStateAndSymbol(String state, String symbol) throws Exception{
         for(Transition tran: transitions){
-            if(tran.getState().equals(state) && tran.getSymbol().equals(symbol))
+            if(tran.matchByStateAndSymbol(state, symbol, getSymbolByAlter(tran.getSymbolRef())))
                 return tran;
         }
         return null;
     }
     
-    public List<Transition> getTransitionsByStateAndSymbol(String state, String symbol){
+    public List<Transition> getTransitionsByStateAndSymbol(String state, String symbol) throws Exception{
         List<Transition> result = new ArrayList<Transition>();
         for(Transition tran: transitions){
-            if(tran.getState().equals(state) && tran.getSymbol().equals(symbol))
+            if(tran.matchByStateAndSymbol(state, symbol, getSymbolByAlter(tran.getSymbolRef())))
                 result.add(tran);
         }
         return result;
     }
     
-    public List<String> getResultingStatesValuesByStateAndSymbol(String state, String symbol){
+    public List<String> getResultingStatesValuesByStateAndSymbol(String state, String symbol) throws Exception{
         List<String> result = new ArrayList<String>();
         for(Transition tran: transitions){
-            if(tran.getState().equals(state) && tran.getSymbol().equals(symbol))
+            if(tran.matchByStateAndSymbol(state, symbol, getSymbolByAlter(tran.getSymbolRef())))
+                result.add(tran.getResult());
+        }
+        return result;
+    }
+    
+    public List<String> getResultingStatesValuesByStateAndPureSymbol(String state, String symbol) throws Exception{
+        List<String> result = new ArrayList<String>();
+        for(Transition tran: transitions){
+            if(tran.matchByStateAndPureSymbol(state, symbol, getSymbolByAlter(tran.getSymbolRef())))
                 result.add(tran.getResult());
         }
         return result;
@@ -125,7 +134,7 @@ public class AFParser {
     
     public Final findFinalByValue(String value){
         for(Final fin: finals){
-            if(fin.getValue().equals(value))
+            if(fin.matchByValue(value))
                 return fin;
         }
         return null;
@@ -159,7 +168,7 @@ public class AFParser {
     
     public boolean findStateByName(String name){
         for(State state : states){
-            if(state.getValue().equals(name))
+            if(state.mathByValue(name))
                 return true;
         }
         return false;
@@ -171,11 +180,22 @@ public class AFParser {
                 return  AutomatonType.AFD;
             else if(this.type.equals("AFN"))
                 return AutomatonType.AFN;
+            else if(this.type.equals("AFNE"))
+                return AutomatonType.AFNE;
             else
                 return AutomatonType.UNKNOWN;
         return AutomatonType.UNKNOWN;
     }
 
+    private Symbol getSymbolByAlter(String alter){
+        if(alter != null && !alter.isEmpty())
+            for(Symbol symbol : this.alphabet){
+                if(symbol.mathByAlter(alter))
+                    return symbol;  
+            }
+        
+        return null;
+    }
     public List<Symbol> getAlphabet() {
         return alphabet;
     }

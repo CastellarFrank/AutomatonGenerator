@@ -25,6 +25,10 @@ public class Final {
     public Final(String value) {
         this.value = value;
     }
+    
+    public boolean matchByValue(String value){
+        return this.value.equals(value);
+    }
 
     public String getValue() {
         return value;
@@ -33,5 +37,4 @@ public class Final {
     public void setValue(String value) {
         this.value = value;
     }
-    
 }

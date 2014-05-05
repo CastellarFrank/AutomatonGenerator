@@ -42,18 +42,20 @@ public class AFProcessing {
         return "";
     }
     
-    public boolean validateExpression(String expression){
+    public boolean validateExpression(String expression) throws Exception{
         if(content.getAutomatonType() == AutomatonType.AFD)
             return validateAFDExpression(expression);
         else if(content.getAutomatonType() == AutomatonType.AFN)
             return validateAFNExpression(expression);
+        else if(content.getAutomatonType() == AutomatonType.AFNE)
+            return validateAFNEExpression(expression);
         else{
             errorMessage = "Can't validate expression: [" + expression+ "], Missing Automaton Type.";
             return false;
         }
     }
     
-    public boolean validateAFNExpression(String expression){
+    public boolean validateAFNExpression(String expression) throws Exception{
         errorMessage = "";
         List<String> currentStates = new ArrayList<String>();
         currentStates.add(content.getInitial());
@@ -83,7 +85,7 @@ public class AFProcessing {
         }
     }
     
-    public void convertAFNtoAFD(String path) throws JAXBException{
+    public void convertAFNtoAFD(String path) throws JAXBException, Exception{
         AFParser afd = null;
         if(this.content.getAutomatonType() == AutomatonType.AFD){
             afd = this.content;
@@ -92,6 +94,8 @@ public class AFProcessing {
             AFParser afn = this.content;
             afd = new AFParser();
             afd.setInitial(afn.getInitial());
+            afd.setName(afn.getName());
+            afd.setType("AFD");
             afd.addState(new State(afn.getInitial()));
             afd.setAlphabet(new ArrayList<Symbol>(afn.getAlphabet()));
             
@@ -104,7 +108,10 @@ public class AFProcessing {
                     String symbolValue = symbol.getValue();
                     List<String> statesResult = new ArrayList<String>();
                     for(String state : currentStates){
-                        statesResult.addAll(afn.getResultingStatesValuesByStateAndSymbol(state, symbolValue));
+                        List<String> tempResults = clousereFunctionByStateValues(afn.getResultingStatesValuesByStateAndPureSymbol(state, symbolValue));
+                        for(String tResult : tempResults)
+                            if(!statesResult.contains(tResult))
+                                statesResult.add(tResult);
                     }
                     if(!statesResult.isEmpty()){
                         String newstateName = createStateNameFromStatesList(statesResult);
@@ -115,7 +122,63 @@ public class AFProcessing {
                                 afd.addFinal(new Final(newstateName));
                         }
                         String oldStateName = createStateNameFromStatesList(currentStates);
-                        afd.addTransition(new Transition(oldStateName, symbolValue, newstateName));
+                        Transition newTransition = new Transition();
+                        newTransition.setState(oldStateName);
+                        newTransition.setResult(newstateName);
+                        if(symbol.getAlter() == null || symbol.getAlter().isEmpty())
+                            newTransition.setSymbol(symbolValue);
+                        else
+                            newTransition.setSymbolRef(symbol.getAlter());
+                        afd.addTransition(newTransition);
+                    }
+                }
+            }
+        }else if(this.content.getAutomatonType() == AutomatonType.AFNE){
+            AFParser afn = this.content;
+            afd = new AFParser();
+            
+            List<String> initials = parseStateName(afn.getInitial());
+            initials = clousereFunctionByStateValues(initials);
+            String initialName = createStateNameFromStatesList(initials);
+            
+            afd.setInitial(initialName);
+            afd.setName(afn.getName());
+            afd.setType("AFD");
+            
+            afd.addState(new State(initialName));
+            afd.setAlphabet(removeEpsilon(afn.getAlphabet()));
+            
+            List<Symbol> symbols = afn.getAlphabet();
+            List<List<String>> pendingStates = new ArrayList<List<String>>();
+            pendingStates.add(initials);
+            while(!pendingStates.isEmpty()){
+                List<String> currentStates = pendingStates.remove(pendingStates.size() - 1);
+                for(Symbol symbol : symbols){
+                    String symbolValue = symbol.getValue();                    
+                    List<String> statesResult = new ArrayList<String>();
+                    for(String state : currentStates){
+                        List<String> tempResults = clousereFunctionByStateValues(afn.getResultingStatesValuesByStateAndPureSymbol(state, symbolValue));
+                        for(String tResult : tempResults)
+                            if(!statesResult.contains(tResult))
+                                statesResult.add(tResult);
+                    }
+                    if(!statesResult.isEmpty()){
+                        String newstateName = createStateNameFromStatesList(statesResult);
+                        if(!afd.findStateByName(newstateName)){
+                            pendingStates.add(statesResult);
+                            afd.addState(new State(newstateName));
+                            if(afn.fingFinalByValues(statesResult) != null)
+                                afd.addFinal(new Final(newstateName));
+                        }
+                        String oldStateName = createStateNameFromStatesList(currentStates);
+                        Transition newTransition = new Transition();
+                        newTransition.setState(oldStateName);
+                        newTransition.setResult(newstateName);
+                        if(symbol.getAlter() == null || symbol.getAlter().isEmpty())
+                            newTransition.setSymbol(symbolValue);
+                        else
+                            newTransition.setSymbolRef(symbol.getAlter());
+                        afd.addTransition(newTransition);
                     }
                 }
             }
@@ -123,7 +186,7 @@ public class AFProcessing {
         AFParser.marshal(path, afd);
     }
     
-    public boolean validateAFDExpression(String expression){
+    public boolean validateAFDExpression(String expression) throws Exception{
         errorMessage = "";
         String currentState = content.getInitial();
         for(int i=0; i<expression.length();i++){
@@ -147,7 +210,7 @@ public class AFProcessing {
         return errorMessage;
     }
     
-    public String createStateNameFromStatesList(List<String> states){
+    public static String createStateNameFromStatesList(List<String> states){
         if(states.isEmpty())
             return "";
         String result = states.get(0);
@@ -159,7 +222,65 @@ public class AFProcessing {
         return result;
     }
     
-    public List<String> parseStateName(String name){
+    public static List<String> parseStateName(String name){
         return new ArrayList<String>(Arrays.asList(name.split("\\|")));
+    }
+
+    private boolean validateAFNEExpression(String expression) throws Exception {
+        errorMessage = "";
+        List<String> currentStates = new ArrayList<String>();
+        currentStates.add(content.getInitial());
+        currentStates = clousereFunctionByStateValues(currentStates);
+        
+        for(int i=0; i<expression.length();i++){
+            String currentSymbol = "" + expression.charAt(i);
+            List<Transition> trans = new ArrayList<Transition>();
+            for(String current : currentStates){
+                 List<Transition> tempTransitions = content.getTransitionsByStateAndSymbol(current, currentSymbol);
+                 if(tempTransitions != null && !tempTransitions.isEmpty())
+                     trans.addAll(tempTransitions);                 
+            }
+            if(trans.isEmpty()){
+                errorMessage = "There isn't any transition for States: " + currentStates + " and Symbol: [" + currentSymbol + "].";
+                return false;
+            }
+            List<String> newsCurrent = new ArrayList<String>();
+            for(Transition tran : trans)
+                newsCurrent.add(tran.getResult());
+            currentStates = clousereFunctionByStateValues(newsCurrent);
+        }
+        
+        if(content.fingFinalByValues(currentStates) != null)
+            return true;
+        else{
+            errorMessage = "The ending States:"+ currentStates + " for the expression: [" + expression + "] aren't final States.";
+            return false;
+        }
+    }
+    
+    private List<String> clousereFunctionByStateValues(List<String> elements) throws Exception{
+        List<String> elementsWithClousure = new ArrayList<String>();
+        elementsWithClousure.addAll(elements);
+        
+        String epsilonSymbol = "epsilon";
+        for(String element : elements){
+            List<Transition> results = content.getTransitionsByStateAndSymbol(element, epsilonSymbol);
+            for(Transition result : results){
+                if(!elementsWithClousure.contains(result.getResult()))
+                    elementsWithClousure.add(result.getResult());
+            }
+        }
+        return elementsWithClousure;
+    }
+
+    private List<Symbol> removeEpsilon(List<Symbol> alphabet) {
+        List<Symbol> results = alphabet;
+        for(Symbol result : results){
+            if(result.mathValue("epsilon")){
+                results.remove(result);
+                break;
+            }   
+        }
+        return results;
     }
 }

@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<AFD name="BinaryChain" initial="q0">
+<AF name="Ending with 01" initial="q0" type="AFN">
 	<States>
 		<State>q0</State>
 		<State>q1</State>
+		<State>q2</State>
 	</States>
 	<Alphabet>
 		<Symbol>1</Symbol>
 		<Symbol>0</Symbol>
 	</Alphabet>
 	<Transitions>
-		<Transition state="q0" symbol="1" result="q1"/>
+		<Transition state="q0" symbol="0" result="q0"/>
 		<Transition state="q0" symbol="0" result="q1"/>
-		<Transition state="q1" symbol="1" result="q1"/>
-		<Transition state="q1" symbol="0" result="q1"/>
+		<Transition state="q0" symbol="1" result="q0"/>
+		<Transition state="q1" symbol="1" result="q2"/>
 	</Transitions>
 	<Finals>
-		<Final>q1</Final>
+		<Final>q2</Final>
 	</Finals>
-</AFD>
+</AF>
 

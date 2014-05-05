@@ -9,5 +9,5 @@ package BuenRecord.Logic;
  * @author Franklin
  */
 public enum AutomatonType {
-    AFD, AFN, UNKNOWN
+    AFD, AFN, AFNE, UNKNOWN
 }
