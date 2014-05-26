@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AF name="Simple Automata #2" initial="r" type="AFD">
+	<States>
+		<State>r</State>
+		<State>s</State>
+	</States>
+	<Alphabet>
+		<Symbol>1</Symbol>
+		<Symbol>0</Symbol>
+	</Alphabet>
+	<Transitions>
+		<Transition state="r" symbol="1" result="s"/>
+		<Transition state="r" symbol="0" result="r"/>
+		<Transition state="s" symbol="0" result="s"/>
+		<Transition state="s" symbol="1" result="s"/>
+	</Transitions>
+	<Finals>
+		<Final>s</Final>
+	</Finals>
+</AF>

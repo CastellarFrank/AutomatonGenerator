@@ -157,6 +157,21 @@ public class AFParser {
         transitions.add(tran);
     }
     
+    public void addSymbol(Symbol symbol){
+        boolean notFinded = true;
+        for(Symbol s : alphabet)
+            if(s.getValue().equals(symbol.getValue()))
+                notFinded = false;
+        if(notFinded)
+            alphabet.add(symbol);
+    }
+    
+    public void AddAlphabet(List<Symbol> alpha){
+        for(Symbol s : alpha){
+            this.addSymbol(s);
+        }
+    }
+    
     public void addFinal(Final fin){
         boolean notFinded = true;
         for(Final f : finals)
@@ -203,6 +218,7 @@ public class AFParser {
     public void setAlphabet(List<Symbol> alphabet) {
         this.alphabet = alphabet;
     }
+    
 
     public List<Final> getFinals() {
         return finals;

@@ -50,10 +50,12 @@ public class LoaderXML extends javax.swing.JFrame {
         btnLoad = new javax.swing.JButton();
         btnValidate = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        lblAFLoaded = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        lblAFType = new javax.swing.JLabel();
         btnExportAFD = new javax.swing.JButton();
+        btnUnion = new javax.swing.JButton();
+        btnIntersection = new javax.swing.JButton();
+        lblAFLoaded = new javax.swing.JTextField();
+        lblAFType = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,15 +86,11 @@ public class LoaderXML extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel3.setText("AF Loaded:");
 
-        lblAFLoaded.setText("There isn't any AF loaded.");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel4.setText("AF Type:");
-
-        lblAFType.setText("There isn't any AF loaded.");
 
         btnExportAFD.setText("Export AFD");
         btnExportAFD.setEnabled(false);
@@ -102,56 +100,94 @@ public class LoaderXML extends javax.swing.JFrame {
             }
         });
 
+        btnUnion.setText("U");
+        btnUnion.setToolTipText("Union");
+        btnUnion.setEnabled(false);
+        btnUnion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnionActionPerformed(evt);
+            }
+        });
+
+        btnIntersection.setText("I");
+        btnIntersection.setToolTipText("Intersection");
+        btnIntersection.setEnabled(false);
+        btnIntersection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIntersectionActionPerformed(evt);
+            }
+        });
+
+        lblAFLoaded.setEditable(false);
+        lblAFLoaded.setText("There isn't any AF loaded.");
+
+        lblAFType.setEditable(false);
+        lblAFType.setText("There isn't any AF loaded.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPath, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2))
+                .addContainerGap(29, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel3))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblAFType)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnExportAFD))
-                                .addComponent(lblAFLoaded)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPath, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(24, 24, 24)
-                                .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(lblAFType, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(lblAFLoaded, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnExportAFD)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUnion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIntersection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(51, 51, 51))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jLabel1)
+                .addContainerGap(334, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(lblAFLoaded, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(11, 11, 11)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(lblAFType)
-                            .addComponent(btnExportAFD))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1))
-                    .addComponent(lblAFLoaded))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblAFType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(6, 6, 6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUnion)
+                            .addComponent(btnIntersection))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExportAFD)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnPath)
                     .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -159,11 +195,11 @@ public class LoaderXML extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(41, 41, 41))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-467)/2, (screenSize.height-289)/2, 467, 289);
+        setBounds((screenSize.width-467)/2, (screenSize.height-328)/2, 467, 328);
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPathActionPerformed
@@ -221,13 +257,95 @@ private void btnExportAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     int selected = saveFile.showSaveDialog(this);
     if(selected == JFileChooser.APPROVE_OPTION){
         String path = saveFile.getSelectedFile().getAbsolutePath();
+        try {
+            AFManager.convertAFNtoAFD(path);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }    
+}//GEN-LAST:event_btnExportAFDActionPerformed
+
+private void btnUnionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnionActionPerformed
+    JFileChooser saveFile = new JFileChooser();
+    int selected = saveFile.showOpenDialog(this);
+    if(selected == JFileChooser.APPROVE_OPTION){
+        String path = saveFile.getSelectedFile().getAbsolutePath();
+        
+        File tempFile = new File(path);
+        if(!tempFile.exists() || tempFile.isDirectory()){
+            JOptionPane.showMessageDialog(this, "The current selected path is invalid.",
+                    "Invalid Path", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        AFProcessing UnionAFManager = new AFProcessing();
+        try {
+            UnionAFManager.processXML(tempFile);
+        } catch (JAXBException ex) {
+            invalidAFLoaded("Error parsing xml file.");
+        }
+        
+        String error = UnionAFManager.validateAF();
+        
+        if(!error.isEmpty()){
+            JOptionPane.showMessageDialog(this,error, "Error At parsing XML", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        saveFile = new JFileChooser();
+    
+        selected = saveFile.showSaveDialog(this);
+        if(selected == JFileChooser.APPROVE_OPTION){
+            path = saveFile.getSelectedFile().getAbsolutePath();
             try {
-                AFManager.convertAFNtoAFD(path);
+                AFManager.generateUnionWithCurrentAndAFContent(UnionAFManager.getContent(), path);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-    }    
-}//GEN-LAST:event_btnExportAFDActionPerformed
+        }    
+    }
+}//GEN-LAST:event_btnUnionActionPerformed
+
+private void btnIntersectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIntersectionActionPerformed
+    JFileChooser saveFile = new JFileChooser();
+    int selected = saveFile.showOpenDialog(this);
+    if(selected == JFileChooser.APPROVE_OPTION){
+        String path = saveFile.getSelectedFile().getAbsolutePath();
+        
+        File tempFile = new File(path);
+        if(!tempFile.exists() || tempFile.isDirectory()){
+            JOptionPane.showMessageDialog(this, "The current selected path is invalid.",
+                    "Invalid Path", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        AFProcessing IntersectionAFManager = new AFProcessing();
+        try {
+            IntersectionAFManager.processXML(tempFile);
+        } catch (JAXBException ex) {
+            invalidAFLoaded("Error parsing xml file.");
+        }
+        
+        String error = IntersectionAFManager.validateAF();
+        
+        if(!error.isEmpty()){
+            JOptionPane.showMessageDialog(this,error, "Error At parsing XML", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        saveFile = new JFileChooser();
+    
+        selected = saveFile.showSaveDialog(this);
+        if(selected == JFileChooser.APPROVE_OPTION){
+            path = saveFile.getSelectedFile().getAbsolutePath();
+            try {
+                AFManager.generateIntersectionWithCurrentAndAFContent(IntersectionAFManager.getContent(), path);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }    
+    }
+}//GEN-LAST:event_btnIntersectionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,15 +385,17 @@ private void btnExportAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportAFD;
+    private javax.swing.JButton btnIntersection;
     private javax.swing.JButton btnLoad;
     private javax.swing.JButton btnPath;
+    private javax.swing.JButton btnUnion;
     private javax.swing.JButton btnValidate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel lblAFLoaded;
-    private javax.swing.JLabel lblAFType;
+    private javax.swing.JTextField lblAFLoaded;
+    private javax.swing.JTextField lblAFType;
     private javax.swing.JTextField txtPath;
     // End of variables declaration//GEN-END:variables
 
@@ -301,6 +421,8 @@ private void btnExportAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         lblAFType.setText(this.AFManager.getContent().getAutomatonType().toString());
         btnValidate.setEnabled(true);
         btnExportAFD.setEnabled(true);
+        btnIntersection.setEnabled(true);
+        btnUnion.setEnabled(true);
     }
     
     private void invalidAFLoaded(String msg){
@@ -312,5 +434,7 @@ private void btnExportAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         lblAFType.setText("There isn't any AF loaded.");
         btnValidate.setEnabled(false);
         btnExportAFD.setEnabled(false);
+        btnIntersection.setEnabled(false);
+        btnUnion.setEnabled(false);
     }
 }

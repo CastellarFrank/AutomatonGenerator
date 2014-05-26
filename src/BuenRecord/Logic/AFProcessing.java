@@ -85,6 +85,14 @@ public class AFProcessing {
         }
     }
     
+    public void generateUnionWithCurrentAndAFContent(AFParser AFContent, String path) throws Exception{
+        UnionCurrentAutomataStructureWithAFContent(path, AFContent, "UNION");
+    }
+    
+    public void generateIntersectionWithCurrentAndAFContent(AFParser AFContent, String path) throws Exception{
+        UnionCurrentAutomataStructureWithAFContent(path, AFContent, "INTERSECTION");
+    }
+    
     public void convertAFNtoAFD(String path) throws JAXBException, Exception{
         AFParser afd = null;
         if(this.content.getAutomatonType() == AutomatonType.AFD){
@@ -264,13 +272,19 @@ public class AFProcessing {
         
         String epsilonSymbol = "epsilon";
         for(String element : elements){
-            List<Transition> results = content.getTransitionsByStateAndSymbol(element, epsilonSymbol);
-            for(Transition result : results){
-                if(!elementsWithClousure.contains(result.getResult()))
-                    elementsWithClousure.add(result.getResult());
-            }
+            recursiveAddingClousereElementsFromState(elementsWithClousure, element, epsilonSymbol);
         }
         return elementsWithClousure;
+    }
+    
+    private void recursiveAddingClousereElementsFromState(List<String> elements, String state, String epsilonSymbol) throws Exception{
+        List<Transition> results = content.getTransitionsByStateAndSymbol(state, epsilonSymbol);
+        for(Transition result : results){
+            if(!elements.contains(result.getResult())){
+                elements.add(result.getResult());
+                recursiveAddingClousereElementsFromState(elements, result.getResult(), epsilonSymbol);
+            }
+        }
     }
 
     private List<Symbol> removeEpsilon(List<Symbol> alphabet) {
@@ -282,5 +296,73 @@ public class AFProcessing {
             }   
         }
         return results;
+    }
+
+    private void UnionCurrentAutomataStructureWithAFContent(String path, AFParser AFContent, String Type) throws Exception {
+        AFParser AFCurrent = this.content;
+        AFParser AFNew = AFContent;
+        AFParser AFResult = new AFParser();
+        
+        List<String> initials = parseStateName(AFCurrent.getInitial());
+        initials.add(AFNew.getInitial());
+        String initialName = createStateNameFromStatesList(initials);
+        AFResult.setInitial(initialName);
+        AFResult.setName(AFCurrent.getName() + " " + Type + " " + AFNew.getName());
+        AFResult.setType(AFCurrent.getType());
+        AFResult.addState(new State(initialName));
+        
+        AFResult.setAlphabet(AFCurrent.getAlphabet());
+        AFResult.AddAlphabet(AFNew.getAlphabet());
+         
+        List<Symbol> symbols = AFResult.getAlphabet();
+        
+        List<List<String>> pendingStates = new ArrayList<List<String>>();
+        pendingStates.add(initials);
+        while(!pendingStates.isEmpty()){
+            List<String> currentStates = pendingStates.remove(pendingStates.size() - 1);
+            for(Symbol symbol : symbols){
+                String symbolValue = symbol.getValue();                    
+                List<String> statesResult = new ArrayList<String>();
+                for(String state : currentStates){
+                    List<String> tempResults = AFCurrent.getResultingStatesValuesByStateAndPureSymbol(state, symbolValue);
+                    for(String tResult : tempResults)
+                        if(!statesResult.contains(tResult))
+                            statesResult.add(tResult);
+                    tempResults = AFNew.getResultingStatesValuesByStateAndPureSymbol(state, symbolValue);
+                    for(String tResult : tempResults)
+                        if(!statesResult.contains(tResult))
+                            statesResult.add(tResult);
+                }
+                if(!statesResult.isEmpty()){
+                    String newstateName = createStateNameFromStatesList(statesResult);
+                    if(!AFResult.findStateByName(newstateName)){
+                        pendingStates.add(statesResult);
+                        AFResult.addState(new State(newstateName));
+                        if(Type.equals("UNION")){
+                            if(AFCurrent.fingFinalByValues(statesResult) != null)
+                                AFResult.addFinal(new Final(newstateName));
+                            if(AFNew.fingFinalByValues(statesResult) != null)
+                                AFResult.addFinal(new Final(newstateName));
+                        }else{
+                            if(AFCurrent.fingFinalByValues(statesResult) != null &&
+                                    AFNew.fingFinalByValues(statesResult) != null)
+                                AFResult.addFinal(new Final(newstateName));
+                        }
+                        //if(afn.fingFinalByValues(statesResult) != null)
+                          //  afd.addFinal(new Final(newstateName));
+                    }
+                    String oldStateName = createStateNameFromStatesList(currentStates);
+                    Transition newTransition = new Transition();
+                    newTransition.setState(oldStateName);
+                    newTransition.setResult(newstateName);
+                    if(symbol.getAlter() == null || symbol.getAlter().isEmpty())
+                        newTransition.setSymbol(symbolValue);
+                    else
+                        newTransition.setSymbolRef(symbol.getAlter());
+                    AFResult.addTransition(newTransition);
+                }
+            }
+        }
+        AFParser.marshal(path, AFResult);
     }
 }
