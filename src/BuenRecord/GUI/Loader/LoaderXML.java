@@ -11,9 +11,8 @@
 package BuenRecord.GUI.Loader;
 
 import BuenRecord.Logic.AFProcessing;
+import BuenRecord.RegExp.GUI.RegExpForm;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
@@ -27,6 +26,7 @@ public class LoaderXML extends javax.swing.JFrame {
     
     
     public AFProcessing AFManager;
+    private RegExpForm regExpForm;
     /** Creates new form LoaderXML */
     public LoaderXML() {
         initComponents();
@@ -56,6 +56,7 @@ public class LoaderXML extends javax.swing.JFrame {
         btnIntersection = new javax.swing.JButton();
         lblAFLoaded = new javax.swing.JTextField();
         lblAFType = new javax.swing.JTextField();
+        btnValidate1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,7 +69,7 @@ public class LoaderXML extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18));
         jLabel2.setText("AF XML Loader");
 
         btnLoad.setText("Load");
@@ -124,23 +125,17 @@ public class LoaderXML extends javax.swing.JFrame {
         lblAFType.setEditable(false);
         lblAFType.setText("There isn't any AF loaded.");
 
+        btnValidate1.setText("Regular Expression");
+        btnValidate1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValidate1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPath, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
-                .addContainerGap(29, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -162,6 +157,22 @@ public class LoaderXML extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addComponent(jLabel1)
                 .addContainerGap(334, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnValidate1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnPath, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +189,7 @@ public class LoaderXML extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(lblAFType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(6, 6, 6))
                     .addGroup(layout.createSequentialGroup()
@@ -191,11 +202,12 @@ public class LoaderXML extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnPath)
                     .addComponent(txtPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnValidate1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnValidate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41))
+                .addGap(38, 38, 38))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -347,6 +359,16 @@ private void btnIntersectionActionPerformed(java.awt.event.ActionEvent evt) {//G
     }
 }//GEN-LAST:event_btnIntersectionActionPerformed
 
+private void btnValidate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidate1ActionPerformed
+    if(this.regExpForm != null){
+        this.regExpForm.dispose();
+    }
+    
+    this.regExpForm = new RegExpForm();
+    
+    regExpForm.setVisible(true);
+}//GEN-LAST:event_btnValidate1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -390,6 +412,7 @@ private void btnIntersectionActionPerformed(java.awt.event.ActionEvent evt) {//G
     private javax.swing.JButton btnPath;
     private javax.swing.JButton btnUnion;
     private javax.swing.JButton btnValidate;
+    private javax.swing.JButton btnValidate1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -94,6 +94,15 @@ public class AFProcessing {
     }
     
     public void convertAFNtoAFD(String path) throws JAXBException, Exception{
+        AFParser afd = this.convertAFNtoAFD();
+        AFParser.marshal(path, afd);
+    }
+    
+    public void convertAFNToAFD() throws JAXBException, Exception{
+        this.content = convertAFNtoAFD();
+    }
+    
+    public AFParser convertAFNtoAFD() throws JAXBException, Exception{
         AFParser afd = null;
         if(this.content.getAutomatonType() == AutomatonType.AFD){
             afd = this.content;
@@ -191,7 +200,7 @@ public class AFProcessing {
                 }
             }
         }
-        AFParser.marshal(path, afd);
+        return afd;
     }
     
     public boolean validateAFDExpression(String expression) throws Exception{
@@ -312,7 +321,7 @@ public class AFProcessing {
         AFResult.addState(new State(initialName));
         
         AFResult.setAlphabet(AFCurrent.getAlphabet());
-        AFResult.AddAlphabet(AFNew.getAlphabet());
+        AFResult.addAlphabet(AFNew.getAlphabet());
          
         List<Symbol> symbols = AFResult.getAlphabet();
         

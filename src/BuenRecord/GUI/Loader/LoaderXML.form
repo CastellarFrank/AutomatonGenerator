@@ -25,23 +25,6 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="2" attributes="0">
-                  <Group type="102" alignment="2" attributes="0">
-                      <Component id="btnLoad" min="-2" pref="95" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                      <Component id="btnValidate" min="-2" pref="95" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="2" attributes="0">
-                      <Component id="txtPath" min="-2" pref="327" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnPath" min="-2" pref="36" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -69,6 +52,27 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="334" max="32767" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="1">
+                      <Component id="btnLoad" min="-2" pref="95" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnValidate" min="-2" pref="95" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <Component id="btnValidate1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" alignment="0" groupAlignment="2" attributes="0">
+                      <Group type="102" alignment="2" attributes="0">
+                          <Component id="txtPath" min="-2" pref="327" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnPath" min="-2" pref="36" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -88,7 +92,7 @@
                           <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblAFType" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="29" max="32767" attributes="0"/>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
@@ -106,12 +110,13 @@
                   <Component id="btnPath" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="txtPath" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnLoad" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="btnValidate1" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="btnValidate" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -213,6 +218,14 @@
         <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="There isn&apos;t any AF loaded."/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnValidate1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Regular Expression"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnValidate1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

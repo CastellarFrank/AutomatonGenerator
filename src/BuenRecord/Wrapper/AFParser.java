@@ -157,6 +157,12 @@ public class AFParser {
         transitions.add(tran);
     }
     
+    public void addTransitions(List<Transition> transitions){
+        for(Transition tran : transitions){
+            this.addTransition(tran);
+        }
+    }
+    
     public void addSymbol(Symbol symbol){
         boolean notFinded = true;
         for(Symbol s : alphabet)
@@ -166,11 +172,18 @@ public class AFParser {
             alphabet.add(symbol);
     }
     
-    public void AddAlphabet(List<Symbol> alpha){
+    public void addAlphabet(List<Symbol> alpha){
         for(Symbol s : alpha){
             this.addSymbol(s);
         }
     }
+    
+    public void addStates(List<State> states){
+        for(State s: states){
+            this.addState(s);
+        }
+    }
+    
     
     public void addFinal(Final fin){
         boolean notFinded = true;
@@ -267,4 +280,28 @@ public class AFParser {
     public void setType(String type) {
         this.type = type;
     }    
+    
+    public void setType(AutomatonType type){
+        if(type == AutomatonType.AFD){
+            this.type = "AFD";
+        }else if(type == AutomatonType.AFN){
+            this.type = "AFN";
+        }else if(type == AutomatonType.AFNE){
+            this.type = "AFNE";
+        }else{
+            this.type = "UNKNOWN";
+        }
+    }
+    
+    public AFParser copy(){
+        AFParser result = new AFParser();
+        result.setAlphabet(new ArrayList<Symbol>(this.alphabet));
+        result.setFinals(new ArrayList<Final>(this.finals));
+        result.setInitial(this.initial);
+        result.setName(this.name);
+        result.setStates(new ArrayList<State>(this.states));
+        result.setTransitions(new ArrayList<Transition>(this.transitions));
+        result.setType(this.type);
+        return result;
+    }
 }
