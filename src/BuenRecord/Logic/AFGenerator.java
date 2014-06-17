@@ -24,7 +24,16 @@ public class AFGenerator {
     private int statesCounter;
     private AFParser contentGenerated;
     private String currentRegExp;
+    private boolean isInverted;
 
+    public boolean isInverted() {
+        return isInverted;
+    }
+
+    public void setInverted(boolean isInverted) {
+        this.isInverted = isInverted;
+    }
+    
     public String getCurrentRegExp() {
         return currentRegExp;
     }
@@ -126,9 +135,35 @@ public class AFGenerator {
         return new State(name);
     }
 
-    public void generateAFNEAutomata(RegularExpresionNode startNode) {
+    public void generateAFNEAutomata(RegularExpresionNode startNode, boolean invert) {
         this.statesCounter = 0;
-        this.contentGenerated = recursiveAFNEGenerate(startNode);
+        this.isInverted = invert;
+        if(invert){
+            
+            this.contentGenerated = recursiveInvertedAFNEGenerate(startNode);
+        }else{
+            this.contentGenerated = recursiveAFNEGenerate(startNode);
+        }
+    }
+    
+    private AFParser recursiveInvertedAFNEGenerate(RegularExpresionNode node) {
+        AFParser result = null;
+        if(node instanceof ConcatNode){
+            RegularExpresionNode left = ((ConcatNode)node).leftOperandNode;
+            RegularExpresionNode right = ((ConcatNode)node).rightOperandNode;
+            result = this.concatenateAutomatas(this.recursiveInvertedAFNEGenerate(right), this.recursiveInvertedAFNEGenerate(left));
+        }else if(node instanceof OrNode){
+            RegularExpresionNode left = ((OrNode)node).leftOperandNode;
+            RegularExpresionNode right = ((OrNode)node).rightOperandNode;
+            result = this.orAutomatas(this.recursiveInvertedAFNEGenerate(right), this.recursiveInvertedAFNEGenerate(left));
+        }else if(node instanceof CycleNode){
+            RegularExpresionNode unique = ((CycleNode)node).OperandNode;
+            result = this.asteriscAutomata(this.recursiveInvertedAFNEGenerate(unique));
+        }else if(node instanceof SymbolNode){
+            String value = "" + ((SymbolNode)node).Value;
+            result = this.generateLeafAutomata(value);
+        }
+        return result;
     }
 
     private AFParser recursiveAFNEGenerate(RegularExpresionNode node) {

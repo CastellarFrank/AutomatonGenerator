@@ -51,6 +51,7 @@ public class RegExpForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         btnLoadRegExp = new javax.swing.JButton();
         btnEvaluate = new javax.swing.JButton();
+        chkboxRevert = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -75,6 +76,8 @@ public class RegExpForm extends javax.swing.JFrame {
             }
         });
 
+        chkboxRevert.setText("Revert");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,6 +86,12 @@ public class RegExpForm extends javax.swing.JFrame {
                 .addContainerGap(102, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(125, 125, 125))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(btnLoadRegExp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnEvaluate, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -92,11 +101,9 @@ public class RegExpForm extends javax.swing.JFrame {
                     .addComponent(txtChain, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(btnLoadRegExp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnEvaluate, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addGap(200, 200, 200)
+                .addComponent(chkboxRevert)
+                .addContainerGap(204, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,15 +118,17 @@ public class RegExpForm extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtChain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
+                .addComponent(chkboxRevert)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLoadRegExp, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEvaluate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGap(23, 23, 23))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-479)/2, (screenSize.height-292)/2, 479, 292);
+        setBounds((screenSize.width-479)/2, (screenSize.height-315)/2, 479, 315);
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnLoadRegExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadRegExpActionPerformed
@@ -139,7 +148,7 @@ private void btnLoadRegExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         this.txtRegularExpression.requestFocus();
         return;
     }
-    this.currentTree.generateAFNEAutomata(tree);
+    this.currentTree.generateAFNEAutomata(tree, this.chkboxRevert.isSelected());
     this.currentTree.setCurrentRegExp(regExp);
     this.manager.setContent(currentTree.getAFNE());
     try {
@@ -154,6 +163,12 @@ private void btnLoadRegExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
 private void btnEvaluateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluateActionPerformed
     if(this.currentTree.getCurrentRegExp()!= null && this.currentTree.getCurrentRegExp().equals(txtRegularExpression.getText())){
+        if(this.chkboxRevert.isSelected() != this.currentTree.isInverted()){
+            JOptionPane.showMessageDialog(this, "The Current Regular Expression isInverted: [" + this.currentTree.isInverted() + "], you have to reload.", "Can't evaluate", JOptionPane.WARNING_MESSAGE);
+            this.btnLoadRegExp.requestFocus();
+            return;
+        }
+        
         String expression = this.txtChain.getText();
         boolean isValid = false;
         try {
@@ -213,6 +228,7 @@ private void btnEvaluateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEvaluate;
     private javax.swing.JButton btnLoadRegExp;
+    private javax.swing.JCheckBox chkboxRevert;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
